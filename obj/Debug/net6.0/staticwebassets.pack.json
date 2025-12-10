@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/uploads/120fded7-6ef1-45f4-b671-67e9dcb5f8f9_Screenshot 2025-12-07 at 15.17.26.png",
+      "PackagePath": "staticwebassets/uploads/120fded7-6ef1-45f4-b671-67e9dcb5f8f9_Screenshot 2025-12-07 at 15.17.26.png"
+    },
+    {
+      "Id": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/uploads/1ec8bf64-6122-485e-bd33-b62064237c29_IMG_2495 copy.jpg",
+      "PackagePath": "staticwebassets/uploads/1ec8bf64-6122-485e-bd33-b62064237c29_IMG_2495 copy.jpg"
+    },
+    {
+      "Id": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/uploads/28dd552c-d171-4bae-9b02-0978d16b948f_IMG_2495 copy.jpg",
+      "PackagePath": "staticwebassets/uploads/28dd552c-d171-4bae-9b02-0978d16b948f_IMG_2495 copy.jpg"
+    },
+    {
+      "Id": "obj/Debug/net6.0/staticwebassets/msbuild.Encadri-Backend.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net6.0/staticwebassets/msbuild.build.Encadri-Backend.props",
+      "PackagePath": "build\\Encadri-Backend.props"
+    },
+    {
+      "Id": "obj/Debug/net6.0/staticwebassets/msbuild.buildMultiTargeting.Encadri-Backend.props",
+      "PackagePath": "buildMultiTargeting\\Encadri-Backend.props"
+    },
+    {
+      "Id": "obj/Debug/net6.0/staticwebassets/msbuild.buildTransitive.Encadri-Backend.props",
+      "PackagePath": "buildTransitive\\Encadri-Backend.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

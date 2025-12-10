@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "cGmSoB2cvJLE62nXgYWN73jeUe7lYQRewtDlfjHZSGs=",
+  "Source": "Encadri-Backend",
+  "BasePath": "_content/Encadri-Backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Encadri-Backend/wwwroot",
+      "Source": "Encadri-Backend",
+      "ContentRoot": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/",
+      "BasePath": "_content/Encadri-Backend",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/uploads/120fded7-6ef1-45f4-b671-67e9dcb5f8f9_Screenshot 2025-12-07 at 15.17.26.png",
+      "SourceId": "Encadri-Backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/",
+      "BasePath": "_content/Encadri-Backend",
+      "RelativePath": "uploads/120fded7-6ef1-45f4-b671-67e9dcb5f8f9_Screenshot 2025-12-07 at 15.17.26.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/120fded7-6ef1-45f4-b671-67e9dcb5f8f9_Screenshot 2025-12-07 at 15.17.26.png"
+    },
+    {
+      "Identity": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/uploads/1ec8bf64-6122-485e-bd33-b62064237c29_IMG_2495 copy.jpg",
+      "SourceId": "Encadri-Backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/",
+      "BasePath": "_content/Encadri-Backend",
+      "RelativePath": "uploads/1ec8bf64-6122-485e-bd33-b62064237c29_IMG_2495 copy.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/1ec8bf64-6122-485e-bd33-b62064237c29_IMG_2495 copy.jpg"
+    },
+    {
+      "Identity": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/uploads/28dd552c-d171-4bae-9b02-0978d16b948f_IMG_2495 copy.jpg",
+      "SourceId": "Encadri-Backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/bahadhay/Desktop/Encadri-V1 copy/Encadri-Backend/Encadri-Backend/wwwroot/",
+      "BasePath": "_content/Encadri-Backend",
+      "RelativePath": "uploads/28dd552c-d171-4bae-9b02-0978d16b948f_IMG_2495 copy.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/28dd552c-d171-4bae-9b02-0978d16b948f_IMG_2495 copy.jpg"
+    }
+  ]
+}
