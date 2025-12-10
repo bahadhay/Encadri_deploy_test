@@ -9,7 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure PostgreSQL Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    // Railway provides DATABASE_URL, but we also support ConnectionStrings:DefaultConnection for local dev
+    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+                          ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("Database connection string not found. Set DATABASE_URL or ConnectionStrings:DefaultConnection");
+    }
+
     options.UseNpgsql(connectionString);
 });
 
