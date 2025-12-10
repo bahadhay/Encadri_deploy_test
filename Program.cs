@@ -10,14 +10,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     // Railway provides DATABASE_URL, but we also support ConnectionStrings:DefaultConnection for local dev
-    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-                          ?? builder.Configuration.GetConnectionString("DefaultConnection");
+    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+    var configConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+    Console.WriteLine($"DATABASE_URL exists: {!string.IsNullOrEmpty(databaseUrl)}");
+    Console.WriteLine($"ConnectionStrings:DefaultConnection exists: {!string.IsNullOrEmpty(configConnectionString)}");
+
+    var connectionString = databaseUrl ?? configConnectionString;
 
     if (string.IsNullOrEmpty(connectionString))
     {
+        Console.WriteLine("ERROR: No database connection string found!");
+        Console.WriteLine("Please set DATABASE_URL environment variable or ConnectionStrings:DefaultConnection in appsettings.json");
         throw new InvalidOperationException("Database connection string not found. Set DATABASE_URL or ConnectionStrings:DefaultConnection");
     }
 
+    Console.WriteLine($"Using connection string from: {(databaseUrl != null ? "DATABASE_URL" : "appsettings.json")}");
     options.UseNpgsql(connectionString);
 });
 
