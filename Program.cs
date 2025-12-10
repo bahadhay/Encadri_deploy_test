@@ -59,6 +59,33 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     }
 
     Console.WriteLine($"Using connection string from: {(databaseUrl != null ? "Environment Variable" : "appsettings.json")}");
+
+    // Show sanitized connection string for debugging
+    var sanitized = connectionString;
+    if (sanitized.Contains("@"))
+    {
+        var parts = sanitized.Split('@');
+        if (parts[0].Contains("://"))
+        {
+            var authPart = parts[0].Substring(parts[0].IndexOf("://") + 3);
+            if (authPart.Contains(":"))
+            {
+                var user = authPart.Split(':')[0];
+                sanitized = sanitized.Replace(authPart, $"{user}:***");
+            }
+        }
+    }
+    Console.WriteLine($"Connection string format: {sanitized}");
+    Console.WriteLine($"Connection string length: {connectionString.Length}");
+    Console.WriteLine($"First 20 chars: {connectionString.Substring(0, Math.Min(20, connectionString.Length))}");
+
+    // Railway sometimes provides postgres:// instead of postgresql://
+    if (connectionString.StartsWith("postgres://") && !connectionString.StartsWith("postgresql://"))
+    {
+        Console.WriteLine("Converting postgres:// to postgresql://");
+        connectionString = connectionString.Replace("postgres://", "postgresql://");
+    }
+
     Console.WriteLine("=== END DEBUG ===");
     options.UseNpgsql(connectionString);
 });
