@@ -136,11 +136,30 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Seed the database with test data
+// Apply migrations and seed database
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await Encadri_Backend.Data.DbSeeder.SeedDatabase(context);
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        // Apply pending migrations
+        Console.WriteLine("Applying database migrations...");
+        await context.Database.MigrateAsync();
+        Console.WriteLine("Migrations applied successfully!");
+
+        // Seed the database with test data
+        Console.WriteLine("Seeding database...");
+        await Encadri_Backend.Data.DbSeeder.SeedDatabase(context);
+        Console.WriteLine("Database seeding completed!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"ERROR during database setup: {ex.Message}");
+        Console.WriteLine($"Stack trace: {ex.StackTrace}");
+        // Don't crash the app, just log the error
+        Console.WriteLine("Continuing without seeding...");
+    }
 }
 
 // Configure the HTTP request pipeline.
