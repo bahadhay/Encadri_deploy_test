@@ -41,7 +41,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         }
     }
 
-    var connectionString = databaseUrl ?? configConnectionString;
+    var connectionString = (databaseUrl ?? configConnectionString)?.Trim();
 
     if (string.IsNullOrEmpty(connectionString))
     {
