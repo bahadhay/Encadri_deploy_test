@@ -9,23 +9,57 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure PostgreSQL Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    // Railway provides DATABASE_URL, but we also support ConnectionStrings:DefaultConnection for local dev
-    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+    // Railway automatically provides DATABASE_URL when PostgreSQL is linked
+    // Also check for individual postgres environment variables
+    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
+                   ?? Environment.GetEnvironmentVariable("PGURL")
+                   ?? Environment.GetEnvironmentVariable("POSTGRES_URL");
+
+    // For local development
     var configConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+    // Debug logging
+    Console.WriteLine("=== DATABASE CONNECTION DEBUG ===");
     Console.WriteLine($"DATABASE_URL exists: {!string.IsNullOrEmpty(databaseUrl)}");
     Console.WriteLine($"ConnectionStrings:DefaultConnection exists: {!string.IsNullOrEmpty(configConnectionString)}");
+
+    // Try to build from individual Postgres variables if DATABASE_URL not found
+    if (string.IsNullOrEmpty(databaseUrl))
+    {
+        var pgHost = Environment.GetEnvironmentVariable("PGHOST");
+        var pgPort = Environment.GetEnvironmentVariable("PGPORT");
+        var pgUser = Environment.GetEnvironmentVariable("PGUSER") ?? Environment.GetEnvironmentVariable("POSTGRES_USER");
+        var pgPassword = Environment.GetEnvironmentVariable("PGPASSWORD") ?? Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+        var pgDatabase = Environment.GetEnvironmentVariable("PGDATABASE") ?? Environment.GetEnvironmentVariable("POSTGRES_DB");
+
+        if (!string.IsNullOrEmpty(pgHost) && !string.IsNullOrEmpty(pgUser) && !string.IsNullOrEmpty(pgPassword))
+        {
+            pgPort = pgPort ?? "5432";
+            pgDatabase = pgDatabase ?? "railway";
+            databaseUrl = $"postgresql://{pgUser}:{pgPassword}@{pgHost}:{pgPort}/{pgDatabase}";
+            Console.WriteLine("Built connection string from individual POSTGRES variables");
+        }
+    }
 
     var connectionString = databaseUrl ?? configConnectionString;
 
     if (string.IsNullOrEmpty(connectionString))
     {
         Console.WriteLine("ERROR: No database connection string found!");
-        Console.WriteLine("Please set DATABASE_URL environment variable or ConnectionStrings:DefaultConnection in appsettings.json");
+        Console.WriteLine("Checked: DATABASE_URL, PGURL, POSTGRES_URL, individual PG* variables, and appsettings.json");
+        Console.WriteLine("Available environment variables:");
+        foreach (System.Collections.DictionaryEntry env in Environment.GetEnvironmentVariables())
+        {
+            if (env.Key.ToString().Contains("PG") || env.Key.ToString().Contains("POSTGRES") || env.Key.ToString().Contains("DATABASE"))
+            {
+                Console.WriteLine($"  {env.Key} = {(env.Key.ToString().Contains("PASSWORD") ? "***" : env.Value)}");
+            }
+        }
         throw new InvalidOperationException("Database connection string not found. Set DATABASE_URL or ConnectionStrings:DefaultConnection");
     }
 
-    Console.WriteLine($"Using connection string from: {(databaseUrl != null ? "DATABASE_URL" : "appsettings.json")}");
+    Console.WriteLine($"Using connection string from: {(databaseUrl != null ? "Environment Variable" : "appsettings.json")}");
+    Console.WriteLine("=== END DEBUG ===");
     options.UseNpgsql(connectionString);
 });
 
