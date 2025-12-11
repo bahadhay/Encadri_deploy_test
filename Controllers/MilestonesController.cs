@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Encadri_Backend.Data;
 using Encadri_Backend.Models;
+using Encadri_Backend.Helpers;
 
 namespace Encadri_Backend.Controllers
 {
@@ -55,6 +56,8 @@ namespace Encadri_Backend.Controllers
             milestone.Id = Guid.NewGuid().ToString();
             milestone.CreatedDate = DateTime.UtcNow;
             milestone.UpdatedDate = DateTime.UtcNow;
+            milestone.DueDate = DateTimeHelper.EnsureUtc(milestone.DueDate);
+            milestone.CompletedDate = DateTimeHelper.EnsureUtc(milestone.CompletedDate);
             _context.Milestones.Add(milestone);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = milestone.Id }, milestone);
@@ -74,9 +77,9 @@ namespace Encadri_Backend.Controllers
 
             milestone.Title = updatedMilestone.Title;
             milestone.Description = updatedMilestone.Description;
-            milestone.DueDate = updatedMilestone.DueDate;
+            milestone.DueDate = DateTimeHelper.EnsureUtc(updatedMilestone.DueDate);
             milestone.Status = updatedMilestone.Status;
-            milestone.CompletedDate = updatedMilestone.CompletedDate;
+            milestone.CompletedDate = DateTimeHelper.EnsureUtc(updatedMilestone.CompletedDate);
             milestone.Order = updatedMilestone.Order;
             milestone.UpdatedDate = DateTime.UtcNow;
 

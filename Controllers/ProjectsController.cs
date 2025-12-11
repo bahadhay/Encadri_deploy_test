@@ -4,6 +4,7 @@ using Encadri_Backend.Models;
 using Encadri_Backend.Data;
 using Encadri_Backend.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Encadri_Backend.Helpers;
 
 namespace Encadri_Backend.Controllers
 {
@@ -68,6 +69,10 @@ namespace Encadri_Backend.Controllers
             project.CreatedDate = DateTime.UtcNow;
             project.UpdatedDate = DateTime.UtcNow;
 
+            // Ensure DateTime fields are UTC to avoid PostgreSQL timezone issues
+            project.StartDate = DateTimeHelper.EnsureUtc(project.StartDate);
+            project.EndDate = DateTimeHelper.EnsureUtc(project.EndDate);
+
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
@@ -94,8 +99,11 @@ namespace Encadri_Backend.Controllers
             project.SupervisorEmail = updatedProject.SupervisorEmail;
             project.SupervisorName = updatedProject.SupervisorName;
             project.Status = updatedProject.Status;
-            project.StartDate = updatedProject.StartDate;
-            project.EndDate = updatedProject.EndDate;
+
+            // Ensure DateTime fields are UTC to avoid PostgreSQL timezone issues
+            project.StartDate = DateTimeHelper.EnsureUtc(updatedProject.StartDate);
+            project.EndDate = DateTimeHelper.EnsureUtc(updatedProject.EndDate);
+
             project.Company = updatedProject.Company;
             project.Technologies = updatedProject.Technologies;
             project.Objectives = updatedProject.Objectives;

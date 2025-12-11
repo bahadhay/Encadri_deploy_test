@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Encadri_Backend.Data;
 using Encadri_Backend.Models;
+using Encadri_Backend.Helpers;
 
 namespace Encadri_Backend.Controllers
 {
@@ -55,6 +56,7 @@ namespace Encadri_Backend.Controllers
             evaluation.Id = Guid.NewGuid().ToString();
             evaluation.CreatedDate = DateTime.UtcNow;
             evaluation.UpdatedDate = DateTime.UtcNow;
+            evaluation.DefenseDate = DateTimeHelper.EnsureUtc(evaluation.DefenseDate);
             _context.Evaluations.Add(evaluation);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = evaluation.Id }, evaluation);
@@ -80,7 +82,7 @@ namespace Encadri_Backend.Controllers
             evaluation.ProfessionalConductScore = updatedEvaluation.ProfessionalConductScore;
             evaluation.FinalGrade = updatedEvaluation.FinalGrade;
             evaluation.Comments = updatedEvaluation.Comments;
-            evaluation.DefenseDate = updatedEvaluation.DefenseDate;
+            evaluation.DefenseDate = DateTimeHelper.EnsureUtc(updatedEvaluation.DefenseDate);
             evaluation.UpdatedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

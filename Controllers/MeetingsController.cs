@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Encadri_Backend.Models;
 using Encadri_Backend.Data;
 using Encadri_Backend.Services;
+using Encadri_Backend.Helpers;
 
 namespace Encadri_Backend.Controllers
 {
@@ -58,6 +59,7 @@ namespace Encadri_Backend.Controllers
             meeting.Id = Guid.NewGuid().ToString();
             meeting.CreatedDate = DateTime.UtcNow;
             meeting.UpdatedDate = DateTime.UtcNow;
+            meeting.ScheduledAt = DateTimeHelper.EnsureUtc(meeting.ScheduledAt);
 
             _context.Meetings.Add(meeting);
             await _context.SaveChangesAsync();
@@ -99,7 +101,7 @@ namespace Encadri_Backend.Controllers
             }
 
             meeting.Title = updatedMeeting.Title;
-            meeting.ScheduledAt = updatedMeeting.ScheduledAt;
+            meeting.ScheduledAt = DateTimeHelper.EnsureUtc(updatedMeeting.ScheduledAt);
             meeting.DurationMinutes = updatedMeeting.DurationMinutes;
             meeting.Location = updatedMeeting.Location;
             meeting.Status = updatedMeeting.Status;

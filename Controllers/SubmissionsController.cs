@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Encadri_Backend.Models;
 using Encadri_Backend.Data;
 using Encadri_Backend.Services;
+using Encadri_Backend.Helpers;
 
 namespace Encadri_Backend.Controllers
 {
@@ -84,6 +85,7 @@ namespace Encadri_Backend.Controllers
             submission.Id = Guid.NewGuid().ToString();
             submission.CreatedDate = DateTime.UtcNow;
             submission.UpdatedDate = DateTime.UtcNow;
+            submission.DueDate = DateTimeHelper.EnsureUtc(submission.DueDate);
 
             _context.Submissions.Add(submission);
             await _context.SaveChangesAsync();
@@ -140,7 +142,7 @@ namespace Encadri_Backend.Controllers
             submission.Status = updatedSubmission.Status;
             submission.Feedback = updatedSubmission.Feedback;
             submission.Grade = updatedSubmission.Grade;
-            submission.DueDate = updatedSubmission.DueDate;
+            submission.DueDate = DateTimeHelper.EnsureUtc(updatedSubmission.DueDate);
             submission.UpdatedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
