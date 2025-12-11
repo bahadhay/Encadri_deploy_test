@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   login(credentials: {email: string, password: string}) {
-    return this.apiService.post<LoginResponse>('/auth/login', credentials).pipe(
+    return this.apiService.post<LoginResponse>('/Auth/login', credentials).pipe(
       tap(response => {
         this.setSession(response);
       })
@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   register(userData: any) {
-    return this.apiService.post<LoginResponse>('/auth/register', userData).pipe(
+    return this.apiService.post<LoginResponse>('/Auth/register', userData).pipe(
       tap(response => {
         this.setSession(response);
       })
@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   updateProfile(user: Partial<User>) {
-    return this.apiService.put<User>('/auth/profile', user).pipe(
+    return this.apiService.put<User>('/Auth/profile', user).pipe(
       tap(updatedUser => {
         // Update local session with new user data
         const currentToken = this.getToken();
