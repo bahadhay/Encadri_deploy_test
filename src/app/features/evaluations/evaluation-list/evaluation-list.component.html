@@ -1,0 +1,80 @@
+<div class="evaluations-container">
+  <div class="loading-state" *ngIf="loading()">
+    <div class="spinner"></div>
+    <p>Loading evaluations...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading() && evaluations().length === 0">
+    <div class="empty-icon">📊</div>
+    <h3>No evaluations yet</h3>
+    <p>Evaluations and grades will appear here.</p>
+    <app-ui-button variant="primary" [routerLink]="['/projects', projectId, 'evaluations', 'new']">
+      + Add Evaluation
+    </app-ui-button>
+  </div>
+
+  <div class="evaluations-list" *ngIf="!loading() && evaluations().length > 0">
+    <app-ui-card *ngFor="let evaluation of evaluations()">
+      <div class="evaluation-detail-header">
+        <app-ui-button size="sm" variant="outline" [routerLink]="['/projects', projectId, 'evaluations', evaluation.id, 'edit']">
+          Edit Evaluation
+        </app-ui-button>
+      </div>
+      <div class="evaluation-card">
+        <div class="grade-box">
+          <span class="grade">{{ evaluation.finalGrade }}</span>
+          <span class="max-grade">/ 20</span>
+        </div>
+        
+        <div class="card-content">
+          <div class="content-header">
+            <h3>Final Evaluation</h3>
+            <span class="date">{{ evaluation.createdDate | date:'mediumDate' }}</span>
+          </div>
+          
+          <div class="scores-grid">
+            <div class="score-item">
+              <div class="score-header">
+                <span class="label">Report Quality</span>
+                <span class="value">{{ evaluation.reportQualityScore }}/5</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="((evaluation.reportQualityScore || 0) / 5) * 100"></div>
+              </div>
+            </div>
+            <div class="score-item">
+              <div class="score-header">
+                <span class="label">Tech Implementation</span>
+                <span class="value">{{ evaluation.technicalImplementationScore }}/5</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="((evaluation.technicalImplementationScore || 0) / 5) * 100"></div>
+              </div>
+            </div>
+            <div class="score-item">
+              <div class="score-header">
+                <span class="label">Presentation</span>
+                <span class="value">{{ evaluation.presentationScore }}/5</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="((evaluation.presentationScore || 0) / 5) * 100"></div>
+              </div>
+            </div>
+             <div class="score-item">
+              <div class="score-header">
+                <span class="label">Professionalism</span>
+                <span class="value">{{ evaluation.professionalConductScore }}/5</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="((evaluation.professionalConductScore || 0) / 5) * 100"></div>
+              </div>
+            </div>
+          </div>
+
+          <p class="comments" *ngIf="evaluation.comments">"{{ evaluation.comments }}"</p>
+          <p class="evaluator" *ngIf="evaluation.evaluatorName">Evaluated by: {{ evaluation.evaluatorName }}</p>
+        </div>
+      </div>
+    </app-ui-card>
+  </div>
+</div>

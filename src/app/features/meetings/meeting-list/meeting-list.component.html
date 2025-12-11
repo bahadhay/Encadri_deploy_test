@@ -1,0 +1,66 @@
+<div class="meetings-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h2>Meetings</h2>
+      <p>Schedule and manage project meetings</p>
+    </div>
+    <!-- <app-ui-button variant="primary" routerLink="/meetings/new">
+      <span class="icon">+</span> Schedule Meeting
+    </app-ui-button> -->
+  </div>
+
+  <div class="filters">
+    <div class="search-box">
+      <app-ui-input 
+        placeholder="Search meetings..." 
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)">
+      </app-ui-input>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading()">
+    <div class="spinner"></div>
+    <p>Loading meetings...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading() && filteredMeetings.length === 0">
+    <div class="empty-icon">📅</div>
+    <h3>No meetings scheduled</h3>
+    <p>Upcoming meetings will appear here.</p>
+  </div>
+
+  <div class="meetings-list" *ngIf="!loading() && filteredMeetings.length > 0">
+    <app-ui-card *ngFor="let meeting of filteredMeetings">
+      <div class="meeting-card">
+        <div class="date-box">
+          <span class="day">{{ meeting.scheduledAt | date:'d' }}</span>
+          <span class="month">{{ meeting.scheduledAt | date:'MMM' }}</span>
+        </div>
+        
+        <div class="card-content">
+          <div class="content-header">
+            <h3>{{ meeting.title }}</h3>
+            <span class="badge" [ngClass]="getStatusColor(meeting.status)">
+              {{ getStatusLabel(meeting.status) }}
+            </span>
+          </div>
+          
+          <div class="meta-info">
+            <span class="meta-item">🕒 {{ meeting.scheduledAt | date:'shortTime' }} ({{ meeting.durationMinutes }}m)</span>
+            <span class="meta-separator">•</span>
+            <span class="meta-item">📍 {{ meeting.location }}</span>
+          </div>
+
+          <p class="agenda" *ngIf="meeting.agenda">{{ meeting.agenda }}</p>
+        </div>
+
+        <!-- <div class="card-actions">
+           <app-ui-button variant="outline" size="sm" [routerLink]="['/meetings', meeting.id]">
+            Details
+          </app-ui-button>
+        </div> -->
+      </div>
+    </app-ui-card>
+  </div>
+</div>

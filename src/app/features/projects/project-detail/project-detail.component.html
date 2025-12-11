@@ -1,0 +1,185 @@
+<div class="project-detail-container" *ngIf="project() as p">
+  <!-- Header -->
+  <div class="header-actions">
+    <app-ui-button variant="outline" routerLink="/projects">← Back to Projects</app-ui-button>
+    <div class="actions-group">
+      <!-- Chat Button -->
+      <app-ui-button
+        *ngIf="canChat"
+        variant="primary"
+        (click)="openChat()">
+        💬 Chat
+      </app-ui-button>
+
+      <app-ui-button variant="primary" [routerLink]="['/projects', p.id, 'submissions', 'new']">
+        + New Submission
+      </app-ui-button>
+
+      <!-- Owner Actions -->
+      <ng-container *ngIf="isOwner">
+        <app-ui-button variant="secondary" [routerLink]="['/projects', p.id, 'edit']">Edit Project</app-ui-button>
+        <app-ui-button variant="danger" (click)="deleteProject()" [loading]="deletingProject" [disabled]="deletingProject">
+          Delete Project
+        </app-ui-button>
+      </ng-container>
+
+      <!-- Member Actions -->
+      <ng-container *ngIf="isMember">
+        <app-ui-button variant="danger" (click)="leaveProject()" [loading]="leavingProject" [disabled]="leavingProject">
+          Leave Project
+        </app-ui-button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="project-header">
+    <div class="title-section">
+      <div class="badges">
+        <span class="type-badge">{{ p.type }}</span>
+        <span class="status-badge" [ngClass]="getStatusColor(p.status)">{{ getStatusLabel(p.status) }}</span>
+      </div>
+      <h1>{{ p.title }}</h1>
+    </div>
+    <div class="progress-section">
+      <span class="progress-label">Overall Progress</span>
+      <div class="progress-circle">
+        <span>{{ p.progressPercentage }}%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Left Column: Details -->
+    <div class="main-column">
+      <app-ui-card>
+        <div class="section">
+          <h3>Description</h3>
+          <p>{{ p.description }}</p>
+        </div>
+
+        <div class="section" *ngIf="p.technologies?.length">
+          <h3>Technologies</h3>
+          <div class="tech-tags">
+            <span *ngFor="let tech of p.technologies" class="tech-tag">{{ tech }}</span>
+          </div>
+        </div>
+      </app-ui-card>
+
+      <!-- Tabs for Submissions/Meetings (Placeholder for now) -->
+      <app-ui-card class="mt-6">
+        <div class="tabs-header">
+          <button class="tab-btn" [class.active]="activeTab() === 'submissions'" (click)="activeTab.set('submissions')">Submissions</button>
+          <button class="tab-btn" [class.active]="activeTab() === 'meetings'" (click)="activeTab.set('meetings')">Meetings</button>
+          <button class="tab-btn" [class.active]="activeTab() === 'evaluations'" (click)="activeTab.set('evaluations')">Evaluations</button>
+          <button class="tab-btn" [class.active]="activeTab() === 'milestones'" (click)="activeTab.set('milestones')">Milestones</button>
+        </div>
+        <div class="tabs-content">
+      <div *ngIf="activeTab() === 'submissions'">
+        <app-submission-list [projectId]="p.id"></app-submission-list>
+      </div>
+      <div *ngIf="activeTab() === 'meetings'">
+         <div class="tab-actions" style="margin-bottom: 1rem; display: flex; justify-content: flex-end;">
+          <app-ui-button variant="primary" size="sm" [routerLink]="['/projects', p.id, 'meetings', 'new']">
+            + Schedule Meeting
+          </app-ui-button>
+        </div>
+        <app-meeting-list [projectId]="p.id"></app-meeting-list>
+      </div>
+      <div *ngIf="activeTab() === 'evaluations'">
+
+        <app-evaluation-list [projectId]="p.id"></app-evaluation-list>
+      </div>
+      <div *ngIf="activeTab() === 'milestones'">
+        <p class="empty-tab">Milestones feature coming soon...</p>
+      </div>
+    </div>  </app-ui-card>
+    </div>
+
+    <!-- Right Column: Meta Info -->
+    <div class="side-column">
+      <app-ui-card>
+        <h3>Project Info</h3>
+        <div class="meta-list">
+          <div class="meta-item">
+            <span class="label">Student</span>
+            <div class="person-info" *ngIf="p.studentEmail; else inviteStudent">
+              <div class="person-details">
+                <span class="name">{{ p.studentName || 'Pending Join' }}</span>
+                <span class="email">{{ p.studentEmail }}</span>
+              </div>
+            </div>
+            <ng-template #inviteStudent>
+              <div class="invite-placeholder">
+                <span class="text-sm text-slate-500">No student assigned</span>
+                <app-ui-button
+                  *ngIf="canInvite('student')"
+                  size="sm"
+                  variant="outline"
+                  (click)="openInviteModal('student')">
+                  + Invite Student
+                </app-ui-button>
+              </div>
+            </ng-template>
+          </div>
+          <div class="meta-item">
+            <span class="label">Supervisor</span>
+            <div class="person-info" *ngIf="p.supervisorEmail; else inviteSupervisor">
+              <div class="person-details">
+                <span class="name">{{ p.supervisorName || 'Pending Join' }}</span>
+                <span class="email">{{ p.supervisorEmail }}</span>
+              </div>
+            </div>
+            <ng-template #inviteSupervisor>
+               <div class="invite-placeholder">
+                <span class="text-sm text-slate-500">No supervisor assigned</span>
+                <app-ui-button
+                  *ngIf="canInvite('supervisor')"
+                  size="sm"
+                  variant="outline"
+                  (click)="openInviteModal('supervisor')">
+                  + Invite Supervisor
+                </app-ui-button>
+              </div>
+            </ng-template>
+          </div>
+          <div class="meta-item" *ngIf="p.company">
+            <span class="label">Company</span>
+            <span>{{ p.company }}</span>
+          </div>
+        </div>
+      </app-ui-card>
+    </div>
+  </div>
+</div>
+
+<!-- Simple Invitation Modal (Inline for speed, ideally a separate component) -->
+<div class="modal-backdrop" *ngIf="showInviteModal" (click)="closeInviteModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Invite {{ inviteRole | titlecase }}</h3>
+    <p>Enter the email address of the {{ inviteRole }} you want to invite.</p>
+    
+    <div class="form-group">
+      <app-ui-input 
+        label="Email Address" 
+        placeholder="user@example.com" 
+        [formControl]="inviteEmailControl">
+      </app-ui-input>
+    </div>
+
+    <div class="modal-actions">
+      <app-ui-button variant="secondary" (click)="closeInviteModal()">Cancel</app-ui-button>
+      <app-ui-button variant="primary" (click)="sendInvitation()" [loading]="inviting">Send Invitation</app-ui-button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="loading()" class="center-state">
+  <div class="spinner"></div>
+</div>
+
+<div *ngIf="error()" class="center-state">
+  <p class="error-text">{{ error() }}</p>
+  <app-ui-button variant="outline" routerLink="/projects">Back to Projects</app-ui-button>
+</div>

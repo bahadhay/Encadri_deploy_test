@@ -1,0 +1,78 @@
+<div class="projects-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h2>Projects</h2>
+      <p>Manage and track academic projects</p>
+    </div>
+    <app-ui-button variant="primary" routerLink="/projects/new">
+      <span class="icon">+</span> New Project
+    </app-ui-button>
+  </div>
+
+  <div class="filters">
+    <div class="search-box">
+      <app-ui-input 
+        placeholder="Search projects..." 
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)">
+      </app-ui-input>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading()">
+    <div class="spinner"></div>
+    <p>Loading projects...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading() && filteredProjects.length === 0">
+    <div class="empty-icon">📁</div>
+    <h3>No projects found</h3>
+    <p>Get started by creating a new project.</p>
+    <app-ui-button variant="outline" routerLink="/projects/new">Create Project</app-ui-button>
+  </div>
+
+  <div class="projects-grid" *ngIf="!loading() && filteredProjects.length > 0">
+    <app-ui-card *ngFor="let project of filteredProjects" class="project-card-wrapper">
+      <div class="project-card">
+        <div class="card-header">
+          <span class="badge" [ngClass]="getStatusColor(project.status)">
+            {{ getStatusLabel(project.status) }}
+          </span>
+          <span class="type-badge">{{ project.type }}</span>
+        </div>
+        
+        <h3>{{ project.title }}</h3>
+        <p class="description">{{ project.description }}</p>
+        
+        <div class="meta-info">
+          <div class="meta-item">
+            <span class="label">Student:</span> {{ project.studentName }}
+          </div>
+          <div class="meta-item">
+            <span class="label">Technologies:</span>
+            <div class="tech-tags">
+              <span *ngFor="let tech of project.technologies.slice(0, 3)" class="tech-tag">{{ tech }}</span>
+              <span *ngIf="project.technologies.length > 3" class="more-tag">+{{ project.technologies.length - 3 }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-info">
+            <span>Progress</span>
+            <span>{{ project.progressPercentage }}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="project.progressPercentage"></div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <app-ui-button variant="outline" class="w-full" [routerLink]="['/projects', project.id]">
+            View Details
+          </app-ui-button>
+        </div>
+      </div>
+    </app-ui-card>
+  </div>
+</div>

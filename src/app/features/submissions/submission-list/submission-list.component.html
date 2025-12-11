@@ -1,0 +1,63 @@
+<div class="submissions-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h2>Submissions</h2>
+      <p>Review and manage project submissions</p>
+    </div>
+    <!-- <app-ui-button variant="primary" routerLink="/submissions/new">
+      <span class="icon">+</span> New Submission
+    </app-ui-button> -->
+  </div>
+
+  <div class="filters">
+    <div class="search-box">
+      <app-ui-input 
+        placeholder="Search submissions..." 
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)">
+      </app-ui-input>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading()">
+    <div class="spinner"></div>
+    <p>Loading submissions...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading() && filteredSubmissions.length === 0">
+    <div class="empty-icon">📝</div>
+    <h3>No submissions found</h3>
+    <p>Submissions from students will appear here.</p>
+  </div>
+
+  <div class="submissions-list" *ngIf="!loading() && filteredSubmissions.length > 0">
+    <app-ui-card *ngFor="let sumbission of filteredSubmissions" class="submission-card-wrapper">
+      <div class="submission-card">
+        <div class="card-icon">📄</div>
+        
+        <div class="card-content">
+          <div class="content-header">
+            <h3>{{ sumbission.title }}</h3>
+            <span class="badge" [ngClass]="getStatusColor(sumbission.status)">
+              {{ getStatusLabel(sumbission.status) }}
+            </span>
+          </div>
+          
+          <div class="meta-info">
+            <span class="meta-item">Type: {{ sumbission.type }}</span>
+            <span class="meta-separator">•</span>
+            <span class="meta-item">By: {{ sumbission.submittedBy }}</span>
+            <span class="meta-separator">•</span>
+            <span class="meta-item">Due: {{ sumbission.dueDate | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+           <app-ui-button variant="outline" size="sm" [routerLink]="['/submissions', sumbission.id]">
+            View
+          </app-ui-button>
+        </div>
+      </div>
+    </app-ui-card>
+  </div>
+</div>
