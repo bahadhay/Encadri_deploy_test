@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Notification {
   id?: string;
@@ -20,7 +21,7 @@ export interface Notification {
 })
 export class NotificationService {
   private hubConnection: signalR.HubConnection | null = null;
-  private readonly hubUrl = 'http://localhost:5040/hubs/notifications';
+  private readonly hubUrl = `${environment.hubUrl}/notifications`;
   private currentUserEmail: string | null = null;
 
   // Signals for reactive state (Angular 18)

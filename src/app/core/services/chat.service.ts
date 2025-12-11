@@ -12,13 +12,14 @@ import {
   MessageReaction,
   LastSeenDto
 } from '../models/chat.models';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   private hubConnection: signalR.HubConnection | null = null;
-  private readonly hubUrl = 'http://localhost:5040/hubs/chat';
+  private readonly hubUrl = `${environment.hubUrl}/chat`;
 
   // Observables for real-time events
   private messagesSubject = new Subject<Message>();
