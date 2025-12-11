@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { ChatComponent } from './chat.component';
+import { environment } from '../../../environments/environment';
 
 interface Contact {
   email: string;
@@ -538,7 +539,7 @@ export class ChatContainerComponent implements OnInit {
   isLoadingContacts = true;
   currentUser: any;
 
-  private apiUrl = 'http://localhost:5040/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private authService: AuthService,
@@ -562,8 +563,8 @@ export class ChatContainerComponent implements OnInit {
       console.log('🔍 Loading contacts...');
       console.log('👤 Current user:', this.currentUser);
 
-      // Fetch all projects
-      const projects = await this.http.get<Project[]>(`${this.apiUrl}/projects`).toPromise();
+      // Fetch projects for current user only (filtered by backend)
+      const projects = await this.http.get<Project[]>(`${this.apiUrl}/projects?userEmail=${encodeURIComponent(this.currentUser.email)}`).toPromise();
       console.log('📦 Projects received:', projects);
 
       if (!projects) {
