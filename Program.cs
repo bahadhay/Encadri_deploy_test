@@ -79,11 +79,28 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     Console.WriteLine($"Connection string length: {connectionString.Length}");
     Console.WriteLine($"First 20 chars: {connectionString.Substring(0, Math.Min(20, connectionString.Length))}");
 
-    // Railway sometimes provides postgres:// instead of postgresql://
-    if (connectionString.StartsWith("postgres://") && !connectionString.StartsWith("postgresql://"))
+    // Convert postgresql:// URL format to Npgsql connection string format
+    if (connectionString.StartsWith("postgres://") || connectionString.StartsWith("postgresql://"))
     {
-        Console.WriteLine("Converting postgres:// to postgresql://");
-        connectionString = connectionString.Replace("postgres://", "postgresql://");
+        Console.WriteLine("Converting PostgreSQL URL to Npgsql format...");
+        try
+        {
+            var uri = new Uri(connectionString.Replace("postgres://", "postgresql://"));
+            var host = uri.Host;
+            var port = uri.Port > 0 ? uri.Port : 5432;
+            var database = uri.AbsolutePath.TrimStart('/');
+            var userInfo = uri.UserInfo.Split(':');
+            var username = userInfo[0];
+            var password = userInfo.Length > 1 ? userInfo[1] : "";
+
+            connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password}";
+            Console.WriteLine($"Converted to Npgsql format successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to convert URL format: {ex.Message}");
+            Console.WriteLine("Attempting to use URL format directly...");
+        }
     }
 
     Console.WriteLine("=== END DEBUG ===");
