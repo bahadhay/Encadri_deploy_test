@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, ViewChild, ElementRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../core/services/chat.service';
@@ -17,7 +17,7 @@ import { HubConnectionState } from '@microsoft/signalr';
     'style': 'display: flex; flex-direction: column; height: 100%; min-height: 0;'
   }
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
   // Accept recipient and project as inputs
@@ -97,6 +97,32 @@ export class ChatComponent implements OnInit, OnDestroy {
       console.error('Failed to initialize chat:', error);
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    // Detect when recipient changes and reload messages
+    if (changes['recipientEmail'] && !changes['recipientEmail'].firstChange) {
+      console.log('👤 Recipient changed from', changes['recipientEmail'].previousValue, 'to', changes['recipientEmail'].currentValue);
+
+      // Leave old room
+      if (this.roomId && this.currentUser.email) {
+        await this.chatService.leaveRoom(this.roomId, this.currentUser.email);
+      }
+
+      // Create new room ID
+      this.roomId = this.createRoomId(this.currentUser.email, this.recipientEmail);
+
+      // Clear old messages
+      this.messages = [];
+
+      // Load new messages
+      await this.loadMessages();
+
+      // Join new room
+      await this.chatService.joinRoom(this.roomId, this.currentUser.email);
+
+      console.log('✅ Switched to new conversation with', this.recipientEmail);
     }
   }
 
