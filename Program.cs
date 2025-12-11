@@ -102,11 +102,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularApp",
         policy =>
         {
-            policy.WithOrigins(
-                      "http://localhost:4200",  // Angular default port
-                      "http://localhost:5040",  // HTTP backend
-                      "https://localhost:7225"  // HTTPS backend
-                  )
+            policy.SetIsOriginAllowed(_ => true)  // Allow all origins for now
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();  // Required for SignalR
