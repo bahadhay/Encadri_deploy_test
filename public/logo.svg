@@ -1,0 +1,31 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background rounded square -->
+  <rect x="10" y="10" width="180" height="180" rx="40" fill="#5B4FE9"/>
+
+  <!-- Graduation cap icon -->
+  <g transform="translate(100, 100)">
+    <!-- Cap top (board) -->
+    <path d="M -45 -20 L 0 -35 L 45 -20 L 45 -15 L 0 -30 L -45 -15 Z"
+          fill="white" opacity="0.95"/>
+
+    <!-- Cap base -->
+    <ellipse cx="0" cy="-15" rx="45" ry="8"
+             fill="white" opacity="0.8"/>
+
+    <!-- Cap sides -->
+    <path d="M -45 -15 L -45 5 Q -45 15 0 20 Q 45 15 45 5 L 45 -15"
+          fill="white" opacity="0.9"/>
+
+    <!-- Tassel -->
+    <g transform="translate(35, -30)">
+      <line x1="0" y1="0" x2="0" y2="15"
+            stroke="white" stroke-width="2" opacity="0.9"/>
+      <circle cx="0" cy="15" r="4"
+              fill="white" opacity="0.9"/>
+    </g>
+
+    <!-- Bottom shadow/depth -->
+    <ellipse cx="0" cy="20" rx="40" ry="6"
+             fill="white" opacity="0.3"/>
+  </g>
+</svg>

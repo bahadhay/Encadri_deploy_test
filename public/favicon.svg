@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="8" fill="#5B4FE9"/>
+
+  <!-- Simplified graduation cap for small size -->
+  <g transform="translate(16, 16)">
+    <!-- Cap top -->
+    <path d="M -8 -4 L 0 -7 L 8 -4 L 8 -3 L 0 -6 L -8 -3 Z" fill="white"/>
+    <!-- Cap base -->
+    <path d="M -8 -3 L -8 2 Q -8 4 0 5 Q 8 4 8 2 L 8 -3" fill="white" opacity="0.9"/>
+    <!-- Tassel -->
+    <circle cx="6" cy="-6" r="1" fill="white"/>
+  </g>
+</svg>
